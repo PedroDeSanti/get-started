@@ -99,9 +99,6 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     rm -f vscode.deb
 fi
 
-#Q? What does wget -qO- do?
-#A. It downloads the file and prints it to stdout. The -q option makes it quiet, and the -O- option makes it print to stdout.
-
 ##########################
 # Install gnome packages #
 ##########################
@@ -206,14 +203,6 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 
     echo -e "ARM GCC installed successfully!\n"
 fi
-
-#Q? What does tar -xvf do?
-#A. tar -xvf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
-#   x: This tells tar to extract the files.
-#   v: This option will print the name of each file as it’s extracted.
-#   f: This tells tar that you are going to give it a file name to work with.
-
-
 
 # # Install the oh-my-fish
 # curl -L https://get.oh-my.fish | fish # Install the oh-my-fish
