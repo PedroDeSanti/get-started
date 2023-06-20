@@ -39,6 +39,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install neofetch -y
     sudo apt install cmatrix -y
     sudo apt install snapd -y
+    sudo apt install zip unzip -y
 
     echo -e "Basic packages installed successfully!\n"
 fi
@@ -94,9 +95,9 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 
     echo -e "VsCode installed successfully!\n"
 
-    curl -o vscode.deb -fLO "https://go.microsoft.com/fwlink/?LinkID=760868"
-    sudo apt install ./vscode.deb -y
-    rm -f vscode.deb
+    #curl -o vscode.deb -fLO "https://go.microsoft.com/fwlink/?LinkID=760868"
+    #sudo apt install ./vscode.deb -y
+    #rm -f vscode.deb
 fi
 
 ##########################
@@ -115,6 +116,109 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     echo -e "Gnome packages installed successfully!"
 fi
 
+
+#########################
+# Install Dracula Theme #
+#########################
+
+echo ""
+read -p "Do you want to install Dracula Theme? (y/n) " answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing Dracula Theme...\n"
+
+    echo ""
+    read -p "Do you want to install GTK Theme? (y/n) " answer
+
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+
+        echo -e "Installing GTK Dracula Theme...\n"
+
+        curl -o Dracula.zip -fLO https://github.com/dracula/gtk/archive/master.zip
+        unzip Dracula.zip
+        mkdir -p ~/.themes/Dracula
+        cp -r gtk-master/* ~/.themes/Dracula
+        rm -rf gtk-master
+        rm -f Dracula.zip
+
+        gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
+        gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
+
+        echo -e "Installing GTK Dracula Theme installed!\n"
+
+    fi
+
+    echo ""
+    read -p "Do you want to install Icon Theme? (y/n) " answer
+
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+
+        echo -e "Installing Icon Dracula Theme...\n"
+
+        curl -fLO https://github.com/dracula/gtk/files/5214870/Dracula.zip
+        unzip Dracula.zip
+        mkdir -p ~/.icons/Dracula
+        cp -r Dracula/* ~/.icons/Dracula
+        rm -rf Dracula
+        rm -f Dracula.zip
+
+        gsettings set org.gnome.desktop.interface icon-theme "Dracula"
+
+        echo -e "Installing Icon Dracula Theme installed!\n"
+
+    fi
+
+    echo ""
+    read -p "Do you want to install Gnome Terminal Theme? (y/n) " answer
+
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+
+        echo -e "Installing Gnome Terminal Dracula Theme...\n"
+
+        git clone https://github.com/dracula/gnome-terminal
+        cd gnome-terminal
+        ./install.sh
+        cd ..
+        rm -rf gnome-terminal
+
+        echo -e "Installing Gnome Terminal Dracula Theme installed!\n"
+
+    fi
+
+    echo ""
+    read -p "Do you want to install Gedit Theme? (y/n) " answer
+
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+
+        echo -e "Installing Gedit Dracula Theme...\n"
+
+        wget https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+        mkdir -p $HOME/.local/share/gedit/styles/
+        mv dracula.xml $HOME/.local/share/gedit/styles/
+
+        echo -e "Installing Gedit Dracula Theme installed! Activate in Gedit's preferences dialog.\n"
+
+    fi
+
+    echo ""
+    read -p "Do you want to install Tela Circle Icons Theme? (y/n) " answer
+
+    if [ "$answer" != "${answer#[Yy]}" ] ;then
+
+        echo -e "Installing Tela Circle Icons Theme...\n"
+
+        git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git
+        cd Tela-circle-icon-theme
+        ./install.sh
+        cd ..
+        rm -rf Tela-circle-icon-theme
+
+        echo -e "Installing Tela Circle Icons Theme installed!\n"
+
+    fi
+fi
+
+
 ################
 # Install Fish #
 ################
@@ -129,9 +233,11 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install fish -y
     sudo echo -e $(which fish) | sudo tee -a /etc/shells
     sudo chsh -s $(which fish)
+    chsh -s $(which fish)
 
     echo -e "Installing Starship..."
     curl -fsSL https://starship.rs/install.sh | sh
+    mkdir -p ~/.config/fish/
     echo -e "starship init fish | source" >> ~/.config/fish/config.fish
 
     echo -e "Fish installed successfully!\n"
@@ -195,6 +301,7 @@ read -p "Do you want to install ARM GCC? (y/n) " answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     echo -e "Installing ARM GCC...\n"
 
+    cd
     curl -fLO "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2"
     tar -xvf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
     sudo mkdir /opt/arm-none-eabi
@@ -223,6 +330,5 @@ fi
 
 # # Install the powerline-shell theme
 # echo -e "powerline-shell --shell bare $status" >> ~/.config/fish/config.fish # Install the powerline-shell theme
-
 
 
