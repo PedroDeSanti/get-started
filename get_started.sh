@@ -40,6 +40,8 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install cmatrix -y
     sudo apt install snapd -y
     sudo apt install zip unzip -y
+    sudo apt install gdb-multiarch -y
+    sudo apt install vim -y
 
     echo -e "Basic packages installed successfully!\n"
 fi
@@ -94,10 +96,6 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install code -y
 
     echo -e "VsCode installed successfully!\n"
-
-    #curl -o vscode.deb -fLO "https://go.microsoft.com/fwlink/?LinkID=760868"
-    #sudo apt install ./vscode.deb -y
-    #rm -f vscode.deb
 fi
 
 ##########################
@@ -310,6 +308,58 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 
     echo -e "ARM GCC installed successfully!\n"
 fi
+
+##################
+# Install J-Link #
+##################
+
+echo -e "\nFor installing the J-Link, follow the instructions in the link below:\n"
+echo -e "\tJ-Link: https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb"
+
+###################
+# Install Flutter #
+###################
+
+echo ""
+read -p "Do you want to install Flutter? (y/n) " answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing Flutter...\n"
+    
+    cd 
+
+    sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386 -y
+    sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+    sudo apt install default-jdk -y
+
+    sudo snap install flutter --classic
+    flutter sdk-path
+
+    curl -fLO "https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2022.2.1.20/android-studio-2022.2.1.20-linux.tar.gz"
+    tar -xvf android-studio-2022.2.1.20-linux.tar.gz
+    sudo mv android-studio /opt/
+    rm android-studio-2022.2.1.20-linux.tar.gz
+
+    cd /opt/android-studio/bin
+    ./studio.sh
+
+
+    flutter config --android-studio-dir=/opt/android-studio
+
+    flutter doctor --android-licenses
+
+    flutter doctor
+
+    echo -e "Flutter installed successfully!\n"
+
+    #or
+
+    #sudo add-apt-repository ppa:maarten-fonville/android-studio
+    #sudo apt update
+    #sudo apt install android-studio -y
+
+
+
 
 # # Install the oh-my-fish
 # curl -L https://get.oh-my.fish | fish # Install the oh-my-fish
