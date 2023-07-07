@@ -343,20 +343,36 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     cd /opt/android-studio/bin
     ./studio.sh
 
-
-    flutter config --android-studio-dir=/opt/android-studio
-
-    flutter doctor --android-licenses
-
-    flutter doctor
-
-    echo -e "Flutter installed successfully!\n"
-
     #or
 
     #sudo add-apt-repository ppa:maarten-fonville/android-studio
     #sudo apt update
     #sudo apt install android-studio -y
+
+    flutter config --android-studio-dir=/opt/android-studio
+    flutter doctor --android-licenses
+    flutter doctor
+
+    echo -e "Flutter installed successfully!\n"
+    echo -e "Remember to install cmd line tools in Android Studio!\n"
+fi
+
+###################
+# Install Spotify #
+###################
+
+echo ""
+read -p "Do you want to install Spotify? (y/n) " answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing Spotify...\n"
+    
+    curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+    echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+    sudo apt-get update -y && sudo apt-get install spotify-client -y
+
+    echo -e "Spotify installed successfully!\n"
+fi
 
 
 
