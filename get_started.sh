@@ -42,6 +42,8 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install zip unzip -y
     sudo apt install gdb-multiarch -y
     sudo apt install vim -y
+    sudo apt install openocd -y
+    sudo apt install stlink-tools -y
 
     echo -e "Basic packages installed successfully!\n"
 fi
