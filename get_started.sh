@@ -50,6 +50,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install tree -y
     sudo apt install fzf -y
     sudo apt install fd-find -y
+    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
     echo -e "Basic packages installed successfully!\n"
 fi
