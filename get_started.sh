@@ -31,6 +31,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install cmake -y
     sudo apt install python3 -y
     sudo apt install python3-pip -y
+    sudo apt install python-is-python3 -y
     sudo apt install git -y
     sudo apt install uncrustify -y
     sudo apt install curl -y
@@ -44,6 +45,11 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     sudo apt install vim -y
     sudo apt install openocd -y
     sudo apt install stlink-tools -y
+    sudo apt install bat -y
+    sudo apt install exa -y
+    sudo apt install tree -y
+    sudo apt install fzf -y
+    sudo apt install fd-find -y
 
     echo -e "Basic packages installed successfully!\n"
 fi
@@ -134,7 +140,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 
         echo -e "Installing GTK Dracula Theme...\n"
 
-        curl -o Dracula.zip -fLO https://github.com/dracula/gtk/archive/master.zip
+        curl -o Dracula.zip -fL https://github.com/dracula/gtk/archive/master.zip
         unzip Dracula.zip
         mkdir -p ~/.themes/Dracula
         cp -r gtk-master/* ~/.themes/Dracula
@@ -218,6 +224,64 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     fi
 fi
 
+####################
+# Install Touchegg #
+####################
+
+echo ""
+read -p "Do you want to install Touchegg? (y/n) " answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing Touchegg...\n"
+
+    sudo add-apt-repository ppa:touchegg/stable
+    sudo apt update
+    sudo apt install touchegg
+
+    echo -e "Touchegg installed successfully!\n"
+fi
+
+#############################
+# Install Extension Manager #
+#############################
+
+echo ""
+read -p "Do you want to install Extension Manager? (y/n) " answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing Extension Manager...\n"
+
+    flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak install flathub com.mattjakeman.ExtensionManager -y
+
+    echo -e "Extension Manager installed successfully!\n"
+fi
+
+#################
+# Install Kitty #
+#################
+
+echo ""
+read -p "Do you want to install Kitty? (y/n) " answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing Kitty...\n"
+
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+    cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+    cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+    sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+    sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+    sudo ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten /usr/bin/
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/kitty 50
+
+    sudo apt install python3-nautilus
+    pip install nautilus-open-any-terminal
+    glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+    gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal kitty
+
+    echo -e "Kitty installed successfully!\n"
+fi
 
 ################
 # Install Fish #
@@ -228,6 +292,7 @@ read -p "Do you want to install fish? (y/n) " answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     echo -e "Installing fish...\n"
+
     sudo apt-add-repository ppa:fish-shell/release-3 -y
     sudo apt update -y
     sudo apt install fish -y
@@ -239,6 +304,8 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     curl -fsSL https://starship.rs/install.sh | sh
     mkdir -p ~/.config/fish/
     echo -e "starship init fish | source" >> ~/.config/fish/config.fish
+
+    curl -sfL https://git.io/fundle-install | fish
 
     echo -e "Fish installed successfully!\n"
 fi
@@ -315,8 +382,24 @@ fi
 # Install J-Link #
 ##################
 
+
 echo -e "\nFor installing the J-Link, follow the instructions in the link below:\n"
 echo -e "\tJ-Link: https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb"
+
+echo ""
+read -p "Do you want to install J-Link? (y/n) " answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing J-Link...\n"
+
+    cd
+    curl -fLO -d 'accept_license_agreement=accepted&submit=Download+software' https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb
+    sudo apt install ./JLink_Linux_x86_64.deb -y
+    rm JLink_Linux_x86_64.deb
+
+    echo -e "J-Link installed successfully!\n"
+
+fi
 
 ###################
 # Install Flutter #
@@ -376,27 +459,38 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     echo -e "Spotify installed successfully!\n"
 fi
 
+######################
+# Install ArduinoIDE #
+######################
 
+echo ""
+read -p "Do you want to install ArduinoIDE? (y/n) " answer
 
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing ArduinoIDE...\n"
+    
+    curl -fLO https://downloads.arduino.cc/arduino-1.8.19-linux64.tar.xz
+    tar -xvf arduino-1.8.19-linux64.tar.xz
+    sudo mv arduino-1.8.19 /opt/
+    rm arduino-1.8.19-linux64.tar.xz
 
-# # Install the oh-my-fish
-# curl -L https://get.oh-my.fish | fish # Install the oh-my-fish
+    cd /opt/arduino-1.8.19
+    sudo ./install.sh
 
-# # Install the bobthefish theme
-# omf install bobthefish # Install the bobthefish theme
+    echo -e "ArduinoIDE installed successfully!\n"
+fi
 
-# # Install the powerline fonts
-# sudo apt install fonts-powerline -y # Install the powerline fonts
+##################
+# Install NodeJS #
+##################
 
-# # Install the powerline-shell
-# pip3 install powerline-shell # Install the powerline-shell
+echo ""
+read -p "Do you want to install NodeJS? (y/n) " answer
 
-# # Install the powerline-shell theme
-# echo -e "function fish_prompt
-#     powerline-shell --shell bare $status
-# end" >> ~/.config/fish/config.fish # Install the powerline-shell theme
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo -e "Installing NodeJS...\n"
 
-# # Install the powerline-shell theme
-# echo -e "powerline-shell --shell bare $status" >> ~/.config/fish/config.fish # Install the powerline-shell theme
+    echo -e "NodeJS installed successfully!\n"
+fi
 
 
