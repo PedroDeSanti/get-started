@@ -103,6 +103,17 @@ gum_apt_install() {
     fi
 }
 
+gum_apt_update() {
+    if gum_spin "Updating package list..." "sudo apt-get -qq update -y >> $LOG_FILE 2>&1"; then
+        log_success "Package list updated"
+        return 0
+    else
+        log_error "Failed to update package list." >&2
+        # show_last_error
+        return 1
+    fi
+}
+
 
 ###########################################
 # Install Gum and update/upgrade packages #
@@ -162,13 +173,14 @@ if [[ $choices == *"Install basic packages"* ]]; then
     gum_apt_install vim
     gum_apt_install openocd
     gum_apt_install bat
-    gum_apt_install exa
+    gum_apt_install exa #nao achou
     gum_apt_install tree
     gum_apt_install fzf
     gum_apt_install fd-find
     gum_apt_install btop
     gum_apt_install stlink-tools
     gum_apt_install gcc-arm-none-eabi
+    gum_apt_install flatpak
     curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
     gum_message "Basic packages installed successfully!"
@@ -204,14 +216,15 @@ fi
 if [[ $choices == *"Install VSCode"* ]]; then
     gum_message "Installing VSCode..."
 
-    sudo apt-get install wget gpg -y
+    gum_apt_install wget
+    gum_apt_install gpg
     wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
     sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
     sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
     rm -f packages.microsoft.gpg
-    sudo apt install apt-transport-https -y
-    sudo apt update
-    sudo apt install code -y
+    gum_apt_install apt-transport-https
+    gum_apt_update
+    gum_apt_install code
 
     gum_message "VSCode installed successfully!"
 fi
@@ -242,7 +255,7 @@ if [[ $choices == *"Install GTK Dracula theme"* ]]; then
         gum_message "Installing GTK Dracula Theme...\n"
 
         curl -o Dracula.zip -fL https://github.com/dracula/gtk/archive/master.zip
-        unzip Dracula.zip
+        unzip -qq Dracula.zip
         mkdir -p ~/.themes/Dracula
         cp -r gtk-master/* ~/.themes/Dracula
         rm -rf gtk-master
@@ -321,8 +334,8 @@ if [[ $choices == *"Install Touchegg"* ]]; then
     gum_message "Installing Touchegg..."
 
     sudo add-apt-repository ppa:touchegg/stable
-    sudo apt update
-    sudo apt install touchegg
+    gum_apt_update
+    gum_apt_install touchegg
 
     gum_message "Touchegg installed successfully!"
 fi
@@ -366,8 +379,8 @@ if [[ $choices == *"Install Fish shell"* ]]; then
     gum_message "Installing fish...\n"
 
     sudo apt-add-repository ppa:fish-shell/release-3 -y
-    sudo apt update -y
-    sudo apt install fish -y
+    gum_apt_update
+    gum_apt_install fish
     sudo echo -e $(which fish) | sudo tee -a /etc/shells
     sudo chsh -s $(which fish)
     chsh -s $(which fish)
@@ -375,7 +388,7 @@ if [[ $choices == *"Install Fish shell"* ]]; then
     gum_message "Installing Starship..."
     curl -fsSL https://starship.rs/install.sh | sh
     mkdir -p ~/.config/fish/
-    gum_message "starship init fish | source" >> ~/.config/fish/config.fish
+    echo -e  "starship init fish | source" >> ~/.config/fish/config.fish
 
     curl -sfL https://git.io/fundle-install | fish
 
