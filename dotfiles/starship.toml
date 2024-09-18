@@ -11,8 +11,15 @@ symbol = " "
 symbol = " "
 
 [character]
+
+# error_symbol = "[λ](bold #ff5555)"
+# success_symbol = "[λ](bold #50fa7b)"
+
+# error_symbol   = "[  ](bold #ff5555)"
 error_symbol   = "[](bold #ff5555)"
 success_symbol = "[](bold #50fa7b)"
+# success_symbol = "[█](bold #50fa7b)"
+# success_symbol = "[█](bold #50fa7b)"
 
 
 [cmd_duration]
@@ -228,8 +235,8 @@ style_user = "bold #8be9fd"
 # style = "bg:#212736"
 # format = '[[ $symbol ($version) ](fg:#769ff0 bg:#212736)]($style)'
 
-# [time]
-# disabled = false
-# time_format = "%R" # Hour:Minute Format
-# style = "bg:#1d2230"
-# format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:#1d2230"
+format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'

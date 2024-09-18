@@ -9,7 +9,13 @@ starship init fish | source
 zoxide init fish | source
 
 # Remove welcome message
-set fish_greeting
+# set fish_greeting
+
+function fish_greeting
+    # echo Hello friend!
+    # echo The time is (set_color yellow; date +%T; set_color normal) and this machine is called $hostname
+end
+
 
 #########################
 # Environment Variables #
@@ -32,34 +38,51 @@ set PATH $PATH $CUBE_PROGRAMMER_PATH
 set PATH $PATH $ANDROID_HOME/cmdline-tools/latest/bin
 set PATH $PATH $ANDROID_HOME/platform-tools
 
-################
-# Aliases/Abbr #
-################
 
 abbr cube '$CUBE_PATH/STM32CubeMX'
 abbr cube_programmer '$CUBE_PROGRAMMER_PATH/STM32CubeProgrammer'
+
 abbr thunder 'cd $HOME/Documentos/ThundeRatz'
-abbr swarm 'cd $HOME/Documentos/Swarm'
+
 abbr update 'sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y && sudo snap refresh && flatpak update -y && flatpak remove --unused' -y
 abbr cp-path 'pwd;pwd | xclip -selection clipboard'
-abbr config-fish 'code $HOME/.config/fish/config.fish'
-abbr config-starship 'code ~/.config/starship.toml'
-abbr config-kitty 'code ~/.config/kitty/kitty.conf'
+abbr cp-to-clipboard 'xclip -selection clipboard'
+
+abbr config-fish        '$EDITOR ~/.config/fish/config.fish'
+abbr config-starship    '$EDITOR ~/.config/starship.toml'
+abbr config-kitty       '$EDITOR ~/.config/kitty/kitty.conf'
+abbr config-ranger      '$EDITOR ~/.config/ranger/rc.conf'
+abbr config-awesome     '$EDITOR ~/.config/awesome/rc.lua'
+abbr config-picom       '$EDITOR ~/.config/picom/picom.conf'
+
 abbr redirect_port 'ssh -o IdentitiesOnly=yes -i ~/.ssh/pedrosanti.first pedrosanti.first@pedrosanti-43268.portmap.io -N -R 43268:localhost:1883'
+
 abbr my-ip "hostname -I | awk '{print \$1}'"
+
 abbr stm32guide 'open https://github.com/ThundeRatz/STM32Guide'
+
 abbr gcm 'git commit -m'
 abbr pull 'git pull'
 abbr push 'git push'
 abbr stash 'git stash'
 abbr clean-branches 'git fetch -p && git branch --merged | grep -v \* | xargs git branch -D'
+
 abbr gazebo 'ign gazebo'
+
 abbr clr 'clear'
+
 abbr code. 'code .'
+
 abbr cmake.. 'cmake ..'
-abbr ls 'exa'
+
+abbr logout 'sudo pkill -u $USER'
+
+abbr ls 'exa --icons --color=always'
+
 abbr cd.. 'cd ..'
+
 alias bat='batcat'
+
 abbr :q 'exit'
 abbr :Q 'exit'
 
@@ -120,12 +143,10 @@ function remake
 
 end
 
-#####################
-# Private Functions #
-#####################
+
 
 # Function to wrap the current command line with launch_on_workspace 1
-function _wrap_with_launch_on_workspace
+function wrap_with_launch_on_workspace
     set workspace $argv[1]
 
     # Check if the current command line is empty
@@ -167,6 +188,21 @@ function _unwrap
     commandline -r $new_command
 end
 
+
+# Bind Ctrl+1 to the wrap_with_launch_on_workspace function
+
+bind -k f1 "wrap_with_launch_on_workspace 1"
+bind -k f2 "wrap_with_launch_on_workspace 2"
+bind -k f3 "wrap_with_launch_on_workspace 3"
+bind -k f4 "wrap_with_launch_on_workspace 4"
+bind -k f5 "wrap_with_launch_on_workspace 5"
+bind -k f6 "wrap_with_launch_on_workspace 6"
+bind -k f7 "wrap_with_launch_on_workspace 7"
+bind -k f8 "wrap_with_launch_on_workspace 8"
+bind -k f9 "wrap_with_launch_on_workspace 9"
+bind -k f10 "wrap_with_launch_on_workspace 10"
+
+
 ###########
 # Plugins #
 ###########
@@ -187,21 +223,11 @@ fundle init
 ###############
 
 fzf_configure_bindings --directory=\e\cF --variables=\e\cv
+# fzf_configure_bindings --directory=\cf --variables=\e\cv
 
-bind -k f1 "_wrap_with_launch_on_workspace 1"
-bind -k f2 "_wrap_with_launch_on_workspace 2"
-bind -k f3 "_wrap_with_launch_on_workspace 3"
-bind -k f4 "_wrap_with_launch_on_workspace 4"
-bind -k f5 "_wrap_with_launch_on_workspace 5"
-bind -k f6 "_wrap_with_launch_on_workspace 6"
-bind -k f7 "_wrap_with_launch_on_workspace 7"
-bind -k f8 "_wrap_with_launch_on_workspace 8"
-bind -k f9 "_wrap_with_launch_on_workspace 9"
-bind -k f10 "_wrap_with_launch_on_workspace 10"
+# bind \cF "--type=overlay --stdin-source=@screen_scrollback /usr/local/bin/fzf --no-sort --no-mouse --exact -i"
 
-##########
-# Source #
-##########
-
+# asdf elixir/erlang version manager
 source ~/.asdf/asdf.fish
+
 bass source /opt/ros/humble/setup.bash
