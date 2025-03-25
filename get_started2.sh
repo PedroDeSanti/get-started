@@ -149,8 +149,6 @@ gum_snap_install() {
     fi
 }
 
-gum_curl
-
 
 log "Starting installation script..."
 
