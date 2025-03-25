@@ -159,7 +159,7 @@ if ! command -v gum &> /dev/null; then
     apt_install curl
     sudo mkdir -p /etc/apt/keyrings
     curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list >> $LOG_FILE 2>&1
     apt_update && apt_upgrade && apt_install gum
 else
     apt_update && apt_upgrade
@@ -232,18 +232,21 @@ fi
 if [[ $choices == *"Configure Git"* ]]; then
     gum_message "Git Configuration"
 
-    git_username=$(gum input --prompt "Enter the git username: ")
-    git_email=$(gum input --prompt "Enter the git email: ")
+    git_username=$(gum input --prompt "Enter the git username: " --placeholder "Your github username")
+    git_email=$(gum input --prompt "Enter the git email: " --placeholder "Your github email")
 
     git config --global user.name "$git_username"
     git config --global user.email "$git_email"
     gum_message "Git configured successfully!"
 
     if gum_question "Do you want to configure the SSH?" ; then
+        gum_message "Configuring SSH..."
+
         ssh-keygen -t ed25519 -C "$git_email"
         eval "$(ssh-agent -s)"
         ssh-add ~/.ssh/id_ed25519
         xclip -sel clip < ~/.ssh/id_ed25519.pub
+
         gum_message "SSH configured successfully! The SSH public key was copied to the clipboard!"
     fi
 fi
@@ -406,7 +409,7 @@ fi
 if [[ $choices == *"Install Fish shell"* ]]; then
     gum_message "Installing fish..."
 
-    sudo apt-add-repository ppa:fish-shell/release-3 -y
+    gum_apt_add_repository ppa:fish-shell/release-3 -y
     gum_apt_update
     gum_apt_install fish
     sudo echo -e $(which fish) | sudo tee -a /etc/shells
