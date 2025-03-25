@@ -173,7 +173,7 @@ if [[ $choices == *"Install basic packages"* ]]; then
     gum_apt_install vim
     gum_apt_install openocd
     gum_apt_install bat
-    gum_apt_install exa #nao achou
+    gum_apt_install eza
     gum_apt_install tree
     gum_apt_install fzf
     gum_apt_install fd-find
@@ -181,7 +181,11 @@ if [[ $choices == *"Install basic packages"* ]]; then
     gum_apt_install stlink-tools
     gum_apt_install gcc-arm-none-eabi
     gum_apt_install flatpak
-    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+    gum_apt_install nala
+    gum_apt_install tldr
+    gum_apt_install thunar
+
+    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
     gum_message "Basic packages installed successfully!"
 fi
@@ -423,7 +427,7 @@ if [[ $choices == *"Install J-Link"* ]]; then
 
     cd
     curl -fLO -d 'accept_license_agreement=accepted&submit=Download+software' https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb
-    sudo apt install ./JLink_Linux_x86_64.deb -y
+    gum_apt_install ./JLink_Linux_x86_64.deb
     rm JLink_Linux_x86_64.deb
 
     gum_message "J-Link installed successfully!\n"
