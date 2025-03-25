@@ -36,11 +36,11 @@ apt_install() {
     local package_name=$1
 
     if sudo apt-get -qq install $package_name -y >> $LOG_FILE 2>&1; then
-        log_success "\t$package_name installed"
+        log_success "$package_name installed"
         return 0
     else
         ERROR_COUNT=$((ERROR_COUNT+1))
-        log_error "\tFailed to install $package_name." >&2
+        log_error "Failed to install $package_name." >&2
         # show_last_error
         return 1
     fi
@@ -48,10 +48,10 @@ apt_install() {
 
 apt_update() {
     if sudo apt-get -qq update -y >> $LOG_FILE 2>&1; then
-        log_success "\tPackage list updated"
+        log_success "Package list updated"
         return 0
     else
-        log_error "\tFailed to update package list." >&2
+        log_error "Failed to update package list." >&2
         # show_last_error
         return 1
     fi
@@ -59,10 +59,10 @@ apt_update() {
 
 apt_upgrade() {
     if sudo apt-get -qq upgrade -y >> $LOG_FILE 2>&1; then
-        log_success "\tPackages upgraded"
+        log_success "Packages upgraded"
         return 0
     else
-        log_error "\tFailed to upgrade packages." >&2
+        log_error "Failed to upgrade packages." >&2
         # show_last_error
         return 1
     fi
@@ -149,6 +149,11 @@ gum_snap_install() {
     fi
 }
 
+gum_curl
+
+
+log "Starting installation script..."
+
 
 ###########################################
 # Install Gum and update/upgrade packages #
@@ -164,6 +169,7 @@ if ! command -v gum &> /dev/null; then
 else
     apt_update && apt_upgrade
 fi
+log ""
 
 ###############
 # Choose Menu #
