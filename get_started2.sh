@@ -89,7 +89,7 @@ gum_spin() {
     gum spin --spinner dot --show-output --title "$1" -- bash -c "$2"
 }
 
-gum_apt_install() {
+gum_apt_install_single() {
     local package_name=$1
 
     if gum_spin "Installing $package_name..." "sudo apt-get -qq install $package_name -y >> $LOG_FILE 2>&1"; then
@@ -103,12 +103,47 @@ gum_apt_install() {
     fi
 }
 
+gum_apt_install() {
+    local packages=("$@")
+
+    for package in "${packages[@]}"; do
+        gum_apt_install_single $package
+    done
+}
+
+gum_apt_add_repository() {
+    local repository=$1
+
+    if gum_spin "Adding repository $repository..." "sudo add-apt-repository $repository -y >> $LOG_FILE 2>&1"; then
+        log_success "Repository $repository added"
+        return 0
+    else
+        log_error "Failed to add repository $repository." >&2
+        # show_last_error
+        return 1
+    fi
+}
+
 gum_apt_update() {
     if gum_spin "Updating package list..." "sudo apt-get -qq update -y >> $LOG_FILE 2>&1"; then
         log_success "Package list updated"
         return 0
     else
         log_error "Failed to update package list." >&2
+        # show_last_error
+        return 1
+    fi
+}
+
+gum_snap_install() {
+    local package_name=$1
+
+    if gum_spin "Installing $package_name..." "sudo snap install $package_name >> $LOG_FILE 2>&1"; then
+        log_success "$package_name installed"
+        return 0
+    else
+        ERROR_COUNT=$((ERROR_COUNT+1))
+        log_error "Failed to install $package_name." >&2
         # show_last_error
         return 1
     fi
@@ -140,7 +175,6 @@ choices=$(gum_choose "Install basic packages" \
                      "Install GNOME packages" \
                      "Install GTK Dracula theme" \
                      "Install Touchegg" \
-                     "Install GNOME Extension Manager" \
                      "Install Kitty terminal" \
                      "Install Fish shell" \
                      "Install Nerd Fonts" \
@@ -155,35 +189,36 @@ choices=$(gum_choose "Install basic packages" \
 if [[ $choices == *"Install basic packages"* ]]; then
     gum_message "Installing basic packages..."
 
-    gum_apt_install build-essential
-    gum_apt_install cmake
-    gum_apt_install python3
-    gum_apt_install python3-pip
-    gum_apt_install python-is-python3
-    gum_apt_install git
-    gum_apt_install uncrustify
-    gum_apt_install curl
-    gum_apt_install libusb-1.0-0-dev
-    gum_apt_install xclip
-    gum_apt_install neofetch
-    gum_apt_install cmatrix
-    gum_apt_install snapd
-    gum_apt_install zip unzip
-    gum_apt_install gdb-multiarch
-    gum_apt_install vim
-    gum_apt_install openocd
-    gum_apt_install bat
-    gum_apt_install eza
-    gum_apt_install tree
-    gum_apt_install fzf
-    gum_apt_install fd-find
-    gum_apt_install btop
-    gum_apt_install stlink-tools
-    gum_apt_install gcc-arm-none-eabi
-    gum_apt_install flatpak
-    gum_apt_install nala
-    gum_apt_install tldr
-    gum_apt_install thunar
+    gum_apt_install build-essential \
+                    cmake \
+                    python3 \
+                    python3-pip \
+                    python-is-python3 \
+                    git \
+                    uncrustify \
+                    curl \
+                    libusb-1.0-0-dev \
+                    xclip \
+                    neofetch \
+                    cmatrix \
+                    snapd \
+                    zip \
+                    unzip \
+                    gdb-multiarch \
+                    vim \
+                    openocd \
+                    bat \
+                    eza \
+                    tree \
+                    fzf \
+                    fd-find \
+                    btop \
+                    stlink-tools \
+                    gcc-arm-none-eabi \
+                    flatpak \
+                    nala \
+                    tldr \
+                    thunar
 
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 
@@ -240,11 +275,12 @@ fi
 if [[ $choices == *"Install GNOME packages"* ]]; then
     gum_message "Installing GNOME packages..."
 
-    gum_apt_install gnome-tweaks
-    gum_apt_install gnome-shell-extensions
-    gum_apt_install chrome-gnome-shell
-    gum_apt_install dconf-editor
-    gum_apt_install dconf-cli
+    gum_apt_install gnome-shell gnome-tweaks gnome-shell-extensions chrome-gnome-shell dconf-editor dconf-cli
+
+    flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak install flathub com.mattjakeman.ExtensionManager -y
+
+    gum_message "GNOME packages installed successfully!"
 fi
 
 #########################
@@ -256,7 +292,7 @@ if [[ $choices == *"Install GTK Dracula theme"* ]]; then
 
     if gum_question "Do you want to install GTK Theme?" ;then
 
-        gum_message "Installing GTK Dracula Theme...\n"
+        gum_message "Installing GTK Dracula Theme..."
 
         curl -o Dracula.zip -fL https://github.com/dracula/gtk/archive/master.zip
         unzip -qq Dracula.zip
@@ -268,16 +304,17 @@ if [[ $choices == *"Install GTK Dracula theme"* ]]; then
         gsettings set org.gnome.desktop.interface gtk-theme "Dracula"
         gsettings set org.gnome.desktop.wm.preferences theme "Dracula"
 
-        gum_message "Installing GTK Dracula Theme installed!\n"
+        gum_message "GTK Dracula Theme installed!"
 
     fi
 
     if gum_question "Do you want to install Icon Theme?"; then
 
-        gum_message "Installing Icon Dracula Theme...\n"
+        gum_message "Installing Icon Dracula Theme..."
 
         curl -fLO https://github.com/dracula/gtk/files/5214870/Dracula.zip
-        unzip Dracula.zip
+
+        unzip -qq Dracula.zip
         mkdir -p ~/.icons/Dracula
         cp -r Dracula/* ~/.icons/Dracula
         rm -rf Dracula
@@ -285,13 +322,13 @@ if [[ $choices == *"Install GTK Dracula theme"* ]]; then
 
         gsettings set org.gnome.desktop.interface icon-theme "Dracula"
 
-        gum_message "Installing Icon Dracula Theme installed!\n"
+        gum_message "Icon Dracula Theme installed!"
 
     fi
 
     if gum_question "Do you want to install Gnome Terminal Theme?"; then
 
-        gum_message "Installing Gnome Terminal Dracula Theme...\n"
+        gum_message "Installing Gnome Terminal Dracula Theme..."
 
         git clone https://github.com/dracula/gnome-terminal
         cd gnome-terminal
@@ -299,25 +336,25 @@ if [[ $choices == *"Install GTK Dracula theme"* ]]; then
         cd ..
         rm -rf gnome-terminal
 
-        gum_message "Installing Gnome Terminal Dracula Theme installed!\n"
+        gum_message "Gnome Terminal Dracula Theme installed!"
 
     fi
 
     if gum_question "Do you want to install Gedit Theme?"; then
 
-        gum_message "Installing Gedit Dracula Theme...\n"
+        gum_message "Installing Gedit Dracula Theme..."
 
         wget https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
         mkdir -p $HOME/.local/share/gedit/styles/
         mv dracula.xml $HOME/.local/share/gedit/styles/
 
-        gum_message "Installing Gedit Dracula Theme installed! Activate in Gedit's preferences dialog.\n"
+        gum_message "Gedit Dracula Theme installed! Activate in Gedit's preferences dialog."
 
     fi
 
     if gum_question "Do you want to install Tela Circle Icons Theme?"; then
 
-        gum_message "Installing Tela Circle Icons Theme...\n"
+        gum_message "Installing Tela Circle Icons Theme..."
 
         git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git
         cd Tela-circle-icon-theme
@@ -325,7 +362,7 @@ if [[ $choices == *"Install GTK Dracula theme"* ]]; then
         cd ..
         rm -rf Tela-circle-icon-theme
 
-        gum_message "Installing Tela Circle Icons Theme installed!\n"
+        gum_message "Installing Tela Circle Icons Theme installed!"
 
     fi
 fi
@@ -337,24 +374,11 @@ fi
 if [[ $choices == *"Install Touchegg"* ]]; then
     gum_message "Installing Touchegg..."
 
-    sudo add-apt-repository ppa:touchegg/stable
+    gum_apt_add_repository ppa:touchegg/stable
     gum_apt_update
     gum_apt_install touchegg
 
     gum_message "Touchegg installed successfully!"
-fi
-
-#############################
-# Install Extension Manager #
-#############################
-
-if [[ $choices == *"Install GNOME Extension Manager"* ]]; then
-    gum_message "Installing GNOME Extension Manager..."
-
-    flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    flatpak install flathub com.mattjakeman.ExtensionManager -y
-
-    gum_message "GNOME Extension Manager installed successfully!"
 fi
 
 #################
@@ -362,7 +386,7 @@ fi
 #################
 
 if [[ $choices == *"Install Kitty terminal"* ]]; then
-    gum_message "Installing Kitty terminal...\n"
+    gum_message "Installing Kitty terminal..."
 
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
     cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
@@ -372,7 +396,7 @@ if [[ $choices == *"Install Kitty terminal"* ]]; then
     sudo ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten /usr/bin/
     sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/kitty 50
 
-    gum_message "Kitty terminal installed successfully!\n"
+    gum_message "Kitty terminal installed successfully!"
 fi
 
 ################
@@ -380,7 +404,7 @@ fi
 ################
 
 if [[ $choices == *"Install Fish shell"* ]]; then
-    gum_message "Installing fish...\n"
+    gum_message "Installing fish..."
 
     sudo apt-add-repository ppa:fish-shell/release-3 -y
     gum_apt_update
@@ -396,7 +420,7 @@ if [[ $choices == *"Install Fish shell"* ]]; then
 
     curl -sfL https://git.io/fundle-install | fish
 
-    gum_message "Fish installed successfully!\n"
+    gum_message "Fish installed successfully!"
 fi
 
 ######################
@@ -404,7 +428,7 @@ fi
 ######################
 
 if [[ $choices == *"Install Nerd Fonts"* ]]; then
-    gum_message "Installing Nerd Fonts...\n"
+    gum_message "Installing Nerd Fonts..."
 
     mkdir -p ~/.local/share/fonts
     cd ~/.local/share/fonts
@@ -415,7 +439,7 @@ if [[ $choices == *"Install Nerd Fonts"* ]]; then
     curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Retina/FiraCodeNerdFontMono-Retina.ttf
     curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/SemiBold/FiraCodeNerdFontMono-SemiBold.ttf
     
-    gum_message "Nerd Fonts installed successfully!\n"
+    gum_message "Nerd Fonts installed successfully!"
 fi
 
 ##################
@@ -423,14 +447,14 @@ fi
 ##################
 
 if [[ $choices == *"Install J-Link"* ]]; then
-    gum_message "Installing J-Link...\n"
+    gum_message "Installing J-Link..."
 
     cd
     curl -fLO -d 'accept_license_agreement=accepted&submit=Download+software' https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb
     gum_apt_install ./JLink_Linux_x86_64.deb
     rm JLink_Linux_x86_64.deb
 
-    gum_message "J-Link installed successfully!\n"
+    gum_message "J-Link installed successfully!"
 fi
 
 ###################
@@ -438,13 +462,13 @@ fi
 ###################
 
 if [[ $choices == *"Install Spotify"* ]]; then
-    gum_message "Installing Spotify...\n"
+    gum_message "Installing Spotify..."
 
     curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
     echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo apt-get update -y && sudo apt-get install spotify-client -y
 
-    gum_message "Spotify installed successfully!\n"
+    gum_message "Spotify installed successfully!"
 fi
 
 ###################
@@ -452,30 +476,18 @@ fi
 ###################
 
 if [[ $choices == *"Install Flutter"* ]]; then
-    gum_message "Installing Flutter...\n"
+    gum_message "Installing Flutter..."
     
     cd 
 
-    sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386 -y
-    sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
-    sudo apt install default-jdk -y
+    gum_apt_install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
+    gum_apt_install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+    gum_apt_install default-jdk
 
     sudo snap install flutter --classic
     flutter sdk-path
 
-    curl -fLO "https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2022.2.1.20/android-studio-2022.2.1.20-linux.tar.gz"
-    tar -xvf android-studio-2022.2.1.20-linux.tar.gz
-    sudo mv android-studio /opt/
-    rm android-studio-2022.2.1.20-linux.tar.gz
-
-    cd /opt/android-studio/bin
-    ./studio.sh
-
-    #or
-
-    #sudo add-apt-repository ppa:maarten-fonville/android-studio
-    #sudo apt update
-    #sudo apt install android-studio -y
+    sudo snap install android-studio --classic
 
     flutter config --android-studio-dir=/opt/android-studio
     flutter doctor --android-licenses
