@@ -118,6 +118,7 @@ gum_apt_add_repository() {
         log_success "Repository $repository added"
         return 0
     else
+        ERROR_COUNT=$((ERROR_COUNT+1))
         log_error "Failed to add repository $repository." >&2
         # show_last_error
         return 1
@@ -129,6 +130,7 @@ gum_apt_update() {
         log_success "Package list updated"
         return 0
     else
+        ERROR_COUNT=$((ERROR_COUNT+1))
         log_error "Failed to update package list." >&2
         # show_last_error
         return 1
@@ -161,7 +163,7 @@ if ! command -v gum &> /dev/null; then
     apt_update
     apt_install curl
     sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+    curl -sSfL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
     echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list >> $LOG_FILE 2>&1
     apt_update && apt_upgrade && apt_install gum
 else
@@ -319,7 +321,7 @@ if [[ $choices == *"Install GTK Dracula theme"* ]]; then
 
         gum_message "Installing Icon Dracula Theme..."
 
-        curl -fLO https://github.com/dracula/gtk/files/5214870/Dracula.zip
+        curl -sSfLO https://github.com/dracula/gtk/files/5214870/Dracula.zip
 
         unzip -qq Dracula.zip
         mkdir -p ~/.icons/Dracula
@@ -395,7 +397,7 @@ fi
 if [[ $choices == *"Install Kitty terminal"* ]]; then
     gum_message "Installing Kitty terminal..."
 
-    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+    curl -sSfL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
     cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
     cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
     sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
@@ -421,11 +423,11 @@ if [[ $choices == *"Install Fish shell"* ]]; then
     chsh -s $(which fish)
 
     gum_message "Installing Starship..."
-    curl -fsSL https://starship.rs/install.sh | sh
+    curl -sSfL https://starship.rs/install.sh | sh
     mkdir -p ~/.config/fish/
     echo -e  "starship init fish | source" >> ~/.config/fish/config.fish
 
-    curl -sfL https://git.io/fundle-install | fish
+    curl -sSfL https://git.io/fundle-install | fish
 
     gum_message "Fish installed successfully!"
 fi
@@ -439,12 +441,12 @@ if [[ $choices == *"Install Nerd Fonts"* ]]; then
 
     mkdir -p ~/.local/share/fonts
     cd ~/.local/share/fonts
-    curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Bold/FiraCodeNerdFontMono-Bold.ttf
-    curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Light/FiraCodeNerdFontMono-Light.ttf
-    curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Medium/FiraCodeNerdFontMono-Medium.ttf
-    curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Regular/FiraCodeNerdFontMono-Regular.ttf
-    curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Retina/FiraCodeNerdFontMono-Retina.ttf
-    curl -fLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/SemiBold/FiraCodeNerdFontMono-SemiBold.ttf
+    curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Bold/FiraCodeNerdFontMono-Bold.ttf
+    curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Light/FiraCodeNerdFontMono-Light.ttf
+    curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Medium/FiraCodeNerdFontMono-Medium.ttf
+    curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Regular/FiraCodeNerdFontMono-Regular.ttf
+    curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Retina/FiraCodeNerdFontMono-Retina.ttf
+    curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/SemiBold/FiraCodeNerdFontMono-SemiBold.ttf
     
     gum_message "Nerd Fonts installed successfully!"
 fi
@@ -457,7 +459,7 @@ if [[ $choices == *"Install J-Link"* ]]; then
     gum_message "Installing J-Link..."
 
     cd
-    curl -fLO -d 'accept_license_agreement=accepted&submit=Download+software' https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb
+    curl -sSfLO -d 'accept_license_agreement=accepted&submit=Download+software' https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb
     gum_apt_install ./JLink_Linux_x86_64.deb
     rm JLink_Linux_x86_64.deb
 
