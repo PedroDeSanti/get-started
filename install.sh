@@ -10,7 +10,7 @@ readonly REPO_URL="https://raw.githubusercontent.com/PedroDeSanti/get-started/re
 readonly TEMP_DIR=$(mktemp -d)
 
 # Exit immediately if a command exits with a non-zero status
-set -euo pipefail 
+# set -euo pipefail 
 
 source_scripts=(
     utils/utils.sh
@@ -33,6 +33,7 @@ source_scripts=(
 download_and_source_scripts() {
     for script in "${source_scripts[@]}"; do
         curl -fsSL "$REPO_URL/$script" -o "$TEMP_DIR/$script"
+        printf "Sourcing %s\n" "$script"
         source "$TEMP_DIR/$script"
     done
 }
