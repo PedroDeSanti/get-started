@@ -2,14 +2,12 @@
 
 flutter_deps=(
     curl git unzip xz-utils zip libglu1-mesa
-    libc6:amd64 libstdc++6:amd64 lib32z1 libbz2-1.0:amd64
-    libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386
 )
 
 install_flutter() {
     show_message "Installing Flutter..."
     
-    apt_install "${flutter_deps[@]}" || return
+    require_apt_packages "${flutter_deps[@]}" || return
 
     snap_install android-studio flutter || return
 
