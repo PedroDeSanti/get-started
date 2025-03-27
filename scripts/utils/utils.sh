@@ -34,7 +34,7 @@ select_options() {
 # @Brief: Displays a message
 # @Param: $1 - Message to display
 show_message() {
-    gum style --bold --foreground="212" "$1" " "
+    gum style --bold --foreground="212" " " "$1"
 }
 
 # @Brief: Wraps a command in a loading animation

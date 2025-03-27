@@ -40,4 +40,5 @@ _configure_ssh(){
 
     show_message "Add this SSH key to your GitHub account:"
     cat ~/.ssh/id_ed25519.pub
+    show_message " "
 }
