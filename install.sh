@@ -15,7 +15,7 @@ readonly TEMP_DIR=$(mktemp -d)
 source_scripts=(
     utils/utils.sh
     utils/logger.sh
-    utils/installer.sh
+    utils/installers.sh
     utils/initialize.sh
     basic_packages.sh
     dracula.sh
