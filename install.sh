@@ -6,7 +6,7 @@
 # Date: 09/2024
 # Version: 2.0
 
-readonly REPO_URL="https://raw.githubusercontent.com/your_username/my-repo/main/scripts"
+readonly REPO_URL="https://raw.githubusercontent.com/PedroDeSanti/get-started/refs/heads/newscript/scripts/"
 readonly TMP_DIR=$(mktemp -d)
 
 # Exit immediately if a command exits with a non-zero status

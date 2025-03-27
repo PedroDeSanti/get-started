@@ -3,6 +3,6 @@
 Run on a fresh Ubuntu installation:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/your_username/my-repo/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/PedroDeSanti/get-started/refs/heads/newscript/install.sh | bash
 
 ```
