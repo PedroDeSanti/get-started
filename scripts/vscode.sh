@@ -10,6 +10,4 @@ install_vscode() {
 
     apt_install apt-transport-https || return
     apt_update && apt_install code || return
-
-    log_success "VS Code installed"
 }

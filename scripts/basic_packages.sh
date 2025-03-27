@@ -37,14 +37,14 @@ basic_packages=(
 )
 
 _install_zoxide() {
-    show_message "Installing zoxide..."
+    log_info "Installing zoxide..."
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash >> "$LOG_FILE" 2>&1 || {
         log_error "Failed to install zoxide"
     }
 }
 
 _install_eza() {
-    show_message "Installing eza..."
+    log_info "Installing eza..."
     
     sudo mkdir -p /etc/apt/keyrings
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg

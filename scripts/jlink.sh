@@ -10,8 +10,6 @@ install_jlink() {
     }
 
     apt_install ./JLink_Linux_x86_64.deb || return
-    
-    rm JLink_Linux_x86_64.deb
 
-    log_success "J-Link installed"
+    rm JLink_Linux_x86_64.deb
 }

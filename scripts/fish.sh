@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 _install_starship() {
-    show_message "Installing Starship..."
+    log_info "Installing Starship..."
 
     curl -fsSL https://starship.rs/install.sh | sh -s -- -y >> "$LOG_FILE" 2>&1 || {
         log_error "Failed to install Starship"
@@ -20,7 +20,7 @@ _set_fish_as_default_shell() {
 }
 
 _install_fundle() {
-    show_message "Installing Fundle..."
+    log_info "Installing Fundle..."
     
     curl -fsSL https://git.io/fundle-install | fish >> "$LOG_FILE" 2>&1 || {
         log_error "Failed to install Fundle"
