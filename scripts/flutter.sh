@@ -13,8 +13,8 @@ install_flutter() {
     snap_install "flutter --classic" || return
 
     # Configure Flutter
-    flutter sdk-path
-    flutter config --android-studio-dir=/snap/android-studio/current/android-studio
+    flutter config --android-sdk="$HOME"/Android/Sdk
+    flutter config --android-studio-dir=/snap/android-studio/current
     flutter doctor --android-licenses
     flutter doctor
 
