@@ -59,7 +59,7 @@ _install_gnome_terminal_dracula_theme() {
 
     local profile_id
     profile_id=$(_create_gnome_terminal_profile "Dracula")
-    ./install.sh -s Dracula -p Dracula --skip-dircolor
+    ./install.sh -s Dracula -p Dracula --skip-dircolors
     _set_gnome_terminal_profile_default "$profile_id"
 
     cd ..
