@@ -12,15 +12,6 @@ readonly TEMP_DIR=$(mktemp -d)
 # Exit immediately if a command exits with a non-zero status
 set -euo pipefail 
 
-# Cleanup function
-cleanup() {
-    rm -rf "$TEMP_DIR"
-    if [[ $ERROR_COUNT -eq 0 ]]; then
-        rm -f "$LOG_FILE"
-    fi
-}
-trap cleanup EXIT
-
 source_scripts=(
     utils/utils.sh
     utils/logger.sh
@@ -41,10 +32,18 @@ source_scripts=(
 
 download_and_source_scripts() {
     for script in "${source_scripts[@]}"; do
-        curl -fsSL "$REPO_URL/$script" -o "$TMP_DIR/$script"
-        source "$TMP_DIR/$script"
+        curl -fsSL "$REPO_URL/$script" -o "$TEMP_DIR/$script"
+        source "$TEMP_DIR/$script"
     done
 }
+
+cleanup() {
+    rm -rf "$TEMP_DIR"
+    if [[ $ERROR_COUNT -eq 0 ]]; then
+        rm -f "$LOG_FILE"
+    fi
+}
+trap cleanup EXIT
 
 # Main function
 main() {
