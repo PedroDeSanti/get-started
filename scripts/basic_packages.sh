@@ -50,8 +50,6 @@ _install_eza() {
     wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
     echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list >> "$LOG_FILE" 2>&1
     sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-    sudo apt update
-    sudo apt install -y eza
 
     apt_update && apt_install eza || return   
 }
@@ -63,7 +61,7 @@ install_basic_packages() {
     _install_zoxide
     _install_eza
 
-    flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak_remote_add https://dl.flathub.org/repo/flathub.flatpakrepo
 
     log_success "Basic packages installed"
 }

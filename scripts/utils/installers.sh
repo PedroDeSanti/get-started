@@ -29,7 +29,7 @@ _install() {
 # @Param: $@ - List of packages to install
 apt_install() {
     elevate_privileges
-    _install "sudo apt-get -qq install -y" "$@"
+    _install "sudo apt-get -q install -y" "$@"
 }
 
 # @Brief: Installs a list of packages using snap
@@ -42,8 +42,19 @@ snap_install() {
 # @Brief: Installs a list of packages using flatpak
 # @Param: $@ - List of packages to install
 flatpak_install() {
-    elevate_privileges
     _install "flatpak install -y flathub" "$@"
+}
+
+# @Brief: Adds a remote to flatpak
+# @Param: $1 - Remote to add
+# @Return: 0 if the remote was added successfully, 1 otherwise
+flatpak_remote_add() {
+    if run_with_loading "Adding remote $1..." "flatpak remote-add --if-not-exists flathub $1"; then
+        log_success "Remote added: $1"
+    else
+        log_error "Failed to add remote: $1"
+        return 1
+    fi
 }
 
 # @Brief: Adds a apt repository
@@ -63,7 +74,7 @@ add_apt_repository() {
 # @Return: 0 if the package list was updated successfully, 1 otherwise
 apt_update() {
     elevate_privileges
-    if run_with_loading "Updating package list..." "sudo apt-get -qq update -y"; then
+    if run_with_loading "Updating package list..." "sudo apt-get -q update -y"; then
         log_success "Package list updated"
     else
         log_error "Failed to update package list"
@@ -75,7 +86,7 @@ apt_update() {
 # @Return: 0 if the packages were upgraded successfully, 1 otherwise
 apt_upgrade() {
     elevate_privileges
-    if run_with_loading "Upgrading packages..." "sudo apt-get -qq upgrade -y"; then
+    if run_with_loading "Upgrading packages..." "sudo apt-get -q upgrade -y"; then
         log_success "Packages upgraded"
     else
         log_error "Failed to upgrade packages"
