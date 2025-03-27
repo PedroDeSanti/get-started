@@ -15,10 +15,11 @@ _check_dependencies() {
 
     if [[ ${#missing[@]} -gt 0 ]]; then
         log_info "Installing missing dependencies: ${missing[*]}"
-        sudo apt-get -qq update -y && sudo apt-get -qq install -y "${missing[@]}" >> "$LOG_FILE" 2>&1 || {
+        if ! sudo apt-get -qq update -y >> "$LOG_FILE" 2>&1 || 
+           ! sudo apt-get -qq install -y "${missing[@]}" >> "$LOG_FILE" 2>&1; then
             log_error "Failed to install dependencies. Please install them manually and run the script again."
             exit 1
-        }
+        fi
     fi
 }
 
