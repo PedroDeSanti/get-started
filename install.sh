@@ -50,7 +50,7 @@ trap cleanup EXIT
 # Main function
 main() {
     download_and_source_scripts
-
+    elevate_privileges
     initialize
 
     show_message "Welcome to the Get Started setup script!"
