@@ -42,7 +42,7 @@ _install_gum() {
 
 # @Brief: Initializes the script by installing all dependencies
 initialize() {
-    check_dependencies
+    _check_dependencies
 
     if ! check_command gum; then
         _install_gum
