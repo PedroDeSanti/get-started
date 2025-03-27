@@ -28,8 +28,6 @@ _install_fundle() {
 
 _setup_fish_config() {
     mkdir -p ~/.config/fish
-    echo "starship init fish | source" >> ~/.config/fish/config.fish
-    echo "zoxide init fish | source" >> ~/.config/fish/config.fish
 }
 
 install_fish() {
