@@ -22,6 +22,7 @@ configure_git() {
 # @Brief: Configures SSH for Git and copies the public key to the clipboard
 _configure_ssh(){
     local git_email=$1
+    require_apt_packages xclip
 
     show_message "Configuring SSH..."
     

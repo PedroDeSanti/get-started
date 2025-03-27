@@ -20,6 +20,7 @@ source_scripts=(
     basic_packages.sh
     dracula.sh
     fish.sh
+    flutter.sh
     git_setup.sh
     gnome_packages.sh
     jlink.sh

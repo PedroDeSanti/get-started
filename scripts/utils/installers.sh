@@ -97,3 +97,22 @@ apt_upgrade() {
         return 1
     fi
 }
+
+# @brief Ensures that all specified APT dependencies are installed.
+# @param $@ List of package names to check and install if missing.
+# @return 0 if all dependencies are installed successfully, 1 otherwise.
+require_apt_packages() {
+    local dependencies=("$@")
+    local missing=()
+
+    for dep in "${dependencies[@]}"; do
+        if ! check_command "$dep"; then
+            missing+=("$dep")
+        fi
+    done
+
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        log_info "Installing missing dependencies: ${missing[*]}"
+        apt_update && apt_install "${missing[@]}" || return 1
+    fi
+}

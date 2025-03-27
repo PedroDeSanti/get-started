@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-dependencies=("sudo" "curl" "wget" "gpg" "xclip")
+dependencies=("sudo" "curl" "wget" "gpg")
 
 # @Brief: Checks if dependencies are installed
 # @Return: Exit code 1 if failed to install dependencies
