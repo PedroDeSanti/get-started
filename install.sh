@@ -32,6 +32,7 @@ source_scripts=(
 
 download_and_source_scripts() {
     for script in "${source_scripts[@]}"; do
+        mkdir -p "$TEMP_DIR/$(dirname "$script")"
         curl -fsSL "$REPO_URL/$script" -o "$TEMP_DIR/$script"
         printf "Sourcing %s\n" "$script"
         source "$TEMP_DIR/$script"
