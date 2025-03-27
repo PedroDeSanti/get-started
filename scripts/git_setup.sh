@@ -26,7 +26,7 @@ _configure_ssh(){
 
     show_message "Configuring SSH..."
     
-    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519 -N "" || {
+    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519 -N "" >> "$LOG_FILE" 2>&1 || {
         log_error "Key generation failed"
         return
     }

@@ -20,7 +20,6 @@ basic_packages=(
     vim
     openocd
     bat
-    eza
     tree
     fzf
     fd-find
