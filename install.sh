@@ -7,7 +7,9 @@
 # Version: 2.0
 
 readonly REPO_URL="https://raw.githubusercontent.com/PedroDeSanti/get-started/refs/heads/newscript/scripts/"
-readonly TEMP_DIR=$(mktemp -d)
+
+TEMP_DIR=$(mktemp -d)
+readonly TEMP_DIR
 
 # Exit immediately if a command exits with a non-zero status
 # set -euo pipefail 
@@ -36,6 +38,7 @@ download_and_source_scripts() {
         mkdir -p "$TEMP_DIR/$(dirname "$script")"
         curl -fsSL "$REPO_URL/$script" -o "$TEMP_DIR/$script"
         printf "Sourcing %s\n" "$script"
+        # shellcheck disable=SC1090
         source "$TEMP_DIR/$script"
     done
 }
@@ -56,7 +59,8 @@ main() {
 
     show_message "Welcome to the Get Started setup script!"
     
-    local choices=$(
+    local choices
+    choices=$(
         select_options \
         "Install basic packages" \
         "Configure Git" \

@@ -6,7 +6,9 @@ readonly SUCCESS_COLOR='\033[0;32m'
 readonly WARNING_COLOR='\033[0;33m'
 readonly INFO_COLOR='\033[0;34m'
 readonly NO_COLOR='\033[0m'
-readonly LOG_FILE="$(pwd)/install_log_$(date +%Y%m%d_%H%M%S).txt"
+
+LOG_FILE="$(pwd)/install_log_$(date +%Y%m%d_%H%M%S).txt"
+readonly LOG_FILE
 
 # Initialize error count
 ERROR_COUNT=0

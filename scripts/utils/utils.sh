@@ -16,7 +16,7 @@ elevate_privileges() {
     fi
 }
 
-# @Brief: Prompts the user to confirm an action
+# @Invalid choice"Brief: Prompts the user to confirm an action
 # @Param: $1 - Message to display
 # @Return: 0 if the user confirms, 1 otherwise
 prompt_yes_no() {
@@ -29,6 +29,24 @@ prompt_yes_no() {
 # @Return: The selected options
 select_options() {
     gum choose --no-limit --cursor.foreground="212" --cursor.bold "$@"
+}
+
+# @Brief: Prompts the user to select a single option
+# @Param: $@ - Options to select from
+# @Return: The selected option
+# @Return: 1 if no option was selected
+choose_option() {
+    local options=("$@")
+    local selected_option
+
+    selected_option=$(gum choose --limit 1 --cursor.foreground="212" --cursor.bold "${options[@]}")
+
+    if [[ -z $selected_option ]]; then
+        log_error "No option selected"
+        return 1
+    fi
+
+    echo "$selected_option"
 }
 
 # @Brief: Displays a message

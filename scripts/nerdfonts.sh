@@ -4,7 +4,7 @@ install_nerd_fonts() {
     show_message "Installing Nerd Fonts..."
     
     mkdir -p ~/.local/share/fonts
-    cd ~/.local/share/fonts
+    cd ~/.local/share/fonts || return
     curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Bold/FiraCodeNerdFontMono-Bold.ttf
     curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Light/FiraCodeNerdFontMono-Light.ttf
     curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/Medium/FiraCodeNerdFontMono-Medium.ttf
