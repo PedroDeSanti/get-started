@@ -9,7 +9,8 @@ install_flutter() {
     
     require_apt_packages "${flutter_deps[@]}" || return
 
-    snap_install "android-studio --classic" "flutter -classic" || return
+    snap_install "android-studio --classic" || return
+    snap_install "flutter --classic" || return
 
     # Configure Flutter
     flutter config --android-studio-dir=/snap/android-studio/current/android-studio
