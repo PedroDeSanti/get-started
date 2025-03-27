@@ -34,9 +34,9 @@ _install_dracula_icon_theme() {
 _install_gnome_terminal_dracula_theme() {
     show_message "Installing Gnome Terminal Dracula Theme..."
 
-    git clone https://github.com/dracula/gnome-terminal >> "$LOG_FILE" 2>&1
+    git clone https://github.com/dracula/gnome-terminal
     cd gnome-terminal
-    ./install.sh
+    ./install.sh #-s Dracula -p default
     cd ..
     rm -rf gnome-terminal
 

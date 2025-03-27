@@ -41,6 +41,7 @@ _install_zoxide() {
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash >> "$LOG_FILE" 2>&1 || {
         log_error "Failed to install zoxide"
     }
+    log_success "Installed zoxide"
 }
 
 _install_eza() {

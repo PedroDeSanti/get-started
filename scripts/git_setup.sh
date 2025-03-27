@@ -38,7 +38,6 @@ _configure_ssh(){
 
     xclip -sel clip < ~/.ssh/id_ed25519.pub
 
-    show_message "Add this SSH key to your GitHub account:"
+    show_message "SSH configured successfully! The SSH public key was copied to the clipboard!"
     cat ~/.ssh/id_ed25519.pub
-    show_message " "
 }

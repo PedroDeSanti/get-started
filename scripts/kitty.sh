@@ -16,7 +16,10 @@ install_kitty() {
     sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
     
     sudo ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten /usr/bin/
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/kitty 50
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/kitty 50 >> "$LOG_FILE" 2>&1 || {
+        log_error "Failed to set Kitty as default terminal"
+        return
+    }
 
     log_success "Kitty terminal installed"
 }

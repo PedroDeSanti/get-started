@@ -50,8 +50,9 @@ flatpak_install() {
 # @Return: 0 if the remote was added successfully, 1 otherwise
 flatpak_remote_add() {
     if run_with_loading "Adding remote $1..." "flatpak remote-add --if-not-exists flathub $1"; then
-        log_success "Remote added: $1"
+        log_success "Flatpak remote added: $1"
     else
+        show_last_error
         log_error "Failed to add remote: $1"
         return 1
     fi
@@ -65,6 +66,7 @@ add_apt_repository() {
     if run_with_loading "Adding repository $1..." "sudo add-apt-repository -y $1"; then
         log_success "Added repository: $1"
     else
+        show_last_error
         log_error "Failed to add repository: $1"
         return 1
     fi
@@ -77,6 +79,7 @@ apt_update() {
     if run_with_loading "Updating package list..." "sudo apt-get -q update -y"; then
         log_success "Package list updated"
     else
+        show_last_error
         log_error "Failed to update package list"
         return 1
     fi
@@ -89,6 +92,7 @@ apt_upgrade() {
     if run_with_loading "Upgrading packages..." "sudo apt-get -q upgrade -y"; then
         log_success "Packages upgraded"
     else
+        show_last_error
         log_error "Failed to upgrade packages"
         return 1
     fi
