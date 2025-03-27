@@ -12,6 +12,18 @@ install_flutter() {
     snap_install "android-studio --classic" || return
     snap_install "flutter --classic" || return
 
+    show_message "Launching Android Studio to install the Android SDK..."
+    show_message "Please follow the instructions in Android Studio to install the Android SDK." \
+                 "1. Open Android Studio" \
+                 "2. Go to More Actions > SDK Manager" \
+                 "4. Under SDK Tools, check 'Android SDK Command-line Tools' and click Apply" \
+                 "5. Wait for the installation to complete" \
+                 "6. Close Android Studio to proceed with script execution"
+
+    android-studio >> "$LOG_FILE" 2>&1
+
+    show_message "Android Studio closed. Proceeding with Flutter setup..."
+    
     # Configure Flutter
     flutter config --android-sdk="$HOME"/Android/Sdk
     flutter config --android-studio-dir=/snap/android-studio/current
@@ -19,9 +31,4 @@ install_flutter() {
     flutter doctor
 
     show_message "Flutter installation complete!"
-    show_message "Remember to install Android SDK Command-line Tools in Android Studio:"
-    show_message "1. Open Android Studio"
-    show_message "2. Go to Configure > SDK Manager"
-    show_message "3. Under SDK Tools, check 'Android SDK Command-line Tools'"
-    show_message "4. Click Apply to install"
 }
