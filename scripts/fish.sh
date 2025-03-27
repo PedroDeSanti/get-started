@@ -13,7 +13,8 @@ _set_fish_as_default_shell() {
         echo "$(which fish)" | sudo tee -a /etc/shells >> "$LOG_FILE" 2>&1
     fi
     
-    chsh -s "$(which fish)" >> "$LOG_FILE" 2>&1 || {
+    elevate_privileges
+    sudo chsh -s "$(which fish)" "$USER" >> "$LOG_FILE" 2>&1 || {
         log_warning "Failed to set Fish as default shell"
     }
 }
