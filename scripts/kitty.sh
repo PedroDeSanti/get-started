@@ -3,9 +3,8 @@
 install_kitty() {
     show_message "Installing Kitty terminal..."
     
-    run_with_loading "Downloading and running Kitty installer..." \
-        "curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin >> '$LOG_FILE' 2>&1" || {
-        log_error "Failed to download and run Kitty installer"
+    curl -fsSL https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin >> "$LOG_FILE" 2>&1 || {
+        log_error "Failed to install Kitty"
         return
     }
 
