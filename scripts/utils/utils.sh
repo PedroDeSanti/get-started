@@ -62,7 +62,7 @@ show_message() {
 _run_command_with_loading() {
     local title=$1
     local command=$2
-    if ! gum spin --spinner dot --title "$title" -- bash -c "$command >> $LOG_FILE 2>&1"; then
+    if ! gum spin --spinner dot --title "$title" -- bash -c "$command 2>&1 | sudo tee -a '$LOG_FILE' > /dev/null"; then
         return 1
     fi
 }

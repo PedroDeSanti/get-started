@@ -20,7 +20,7 @@ install_flutter() {
                  "5. Wait for the installation to complete" \
                  "6. Close Android Studio to proceed with script execution"
 
-    android-studio >> "$LOG_FILE" 2>&1
+    android-studio 2>&1 | log_output
 
     show_message "Android Studio closed. Proceeding with Flutter setup..."
 

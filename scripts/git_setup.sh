@@ -26,13 +26,13 @@ _configure_ssh(){
 
     show_message "Configuring SSH..."
     
-    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519 -N "" >> "$LOG_FILE" 2>&1 || {
+    ssh-keygen -t ed25519 -C "$git_email" -f ~/.ssh/id_ed25519 -N "" 2>&1 | log_output || {
         log_error "Key generation failed"
         return
     }
 
-    eval "$(ssh-agent -s)" >> "$LOG_FILE" 2>&1
-    ssh-add ~/.ssh/id_ed25519 >> "$LOG_FILE" 2>&1 || {
+    eval "$(ssh-agent -s)" 2>&1 | log_output
+    ssh-add ~/.ssh/id_ed25519 2>&1 | log_output || {
         log_error "Failed to add SSH key to agent"
         return
     }

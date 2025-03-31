@@ -47,6 +47,14 @@ log_error() {
     ERROR_COUNT=$((ERROR_COUNT + 1))
 }
 
+# @brief Logs the stdout of a command to a log file
+# @details This function is designed to be used in a pipeline. It appends the stdout
+#          of the previous command to the specified log file. To also log stderr,
+#          you must redirect stderr to stdout using `2>&1` before the pipe
+log_output() {
+    sudo tee -a "$LOG_FILE" > /dev/null
+}
+
 # @Brief: Shows the last error message
 show_last_error(){
     log_error "$(grep -i "error\|E:" "$LOG_FILE" | tail -1)"

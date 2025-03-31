@@ -15,8 +15,12 @@ _check_dependencies() {
 
     if [[ ${#missing[@]} -gt 0 ]]; then
         log_info "Installing missing dependencies: ${missing[*]}"
-        sudo apt-get -q update -y >> "$LOG_FILE" 2>&1 && \
-        sudo apt-get -q install -y "${missing[@]}" >> "$LOG_FILE" 2>&1 || {
+        sudo apt-get -q update -y 2>&1 | log_output || {
+            log_error "Failed to update package list"
+            exit 1
+        }
+        
+        sudo apt-get -q install -y "${missing[@]}" 2>&1 | log_output || {
             log_error "Failed to install dependencies. Please install them manually and run the script again."
             exit 1
         }
@@ -32,8 +36,12 @@ _install_gum() {
     curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
     echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list > /dev/null
     
-    sudo apt-get -q update -y >> "$LOG_FILE" 2>&1 && \
-    sudo apt-get -q install -y gum >> "$LOG_FILE" 2>&1 || {
+    sudo apt-get -q update -y 2>&1 | log_output || {
+        log_error "Failed to update package list"
+        exit 1
+    }
+
+    sudo apt-get -q install -y gum 2>&1 | log_output || {
         log_error "Failed to install Gum"
         exit 1
     }

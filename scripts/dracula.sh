@@ -54,7 +54,7 @@ _install_dracula_gtk() {
 _install_gnome_terminal_dracula_theme() {
     show_message "Installing Gnome Terminal Dracula Theme..."
 
-    git clone https://github.com/dracula/gnome-terminal >> "$LOG_FILE" 2>&1
+    git clone https://github.com/dracula/gnome-terminal 2>&1 | log_output
     cd gnome-terminal || return
 
     local profile_id
@@ -102,9 +102,9 @@ _install_dracula_icon_theme() {
 _install_tela_circle_icons() {
     show_message "Installing Tela Circle Icons Theme..."
     
-    git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git >> "$LOG_FILE" 2>&1
+    git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git 2>&1 | log_output
     cd Tela-circle-icon-theme || return
-    ./install.sh >> "$LOG_FILE" 2>&1
+    ./install.sh 2>&1 | log_output
     cd ..
     rm -rf Tela-circle-icon-theme
 

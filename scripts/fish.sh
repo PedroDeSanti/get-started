@@ -2,7 +2,7 @@
 
 _install_starship() {
     run_with_loading "Installing Starship..." \
-        "curl -fsSL https://starship.rs/install.sh | sh -s -- -y >> '$LOG_FILE' 2>&1" || {
+        "curl -fsSL https://starship.rs/install.sh | sh -s -- -y" || {
         log_error "Failed to install Starship"
         return 1
     }
@@ -11,11 +11,11 @@ _install_starship() {
 
 _set_fish_as_default_shell() {
     if ! grep -q "$(which fish)" /etc/shells; then
-        echo "$(which fish)" | sudo tee -a /etc/shells >> "$LOG_FILE" 2>&1
+        echo "$(which fish)" | sudo tee -a /etc/shells 2>&1 | log_output
     fi
     
     elevate_privileges
-    sudo chsh -s "$(which fish)" "$USER" >> "$LOG_FILE" 2>&1 || {
+    sudo chsh -s "$(which fish)" "$USER" 2>&1 | log_output || {
         log_warning "Failed to set Fish as default shell"
         return 1
     }
@@ -24,7 +24,7 @@ _set_fish_as_default_shell() {
 
 _install_fundle() {
     run_with_loading "Installing Fundle..." \
-        "curl -fsSL https://git.io/fundle-install | fish >> '$LOG_FILE' 2>&1" || {
+        "curl -fsSL https://git.io/fundle-install | fish" || {
         log_error "Failed to install Fundle"
         return 1
     }
