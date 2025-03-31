@@ -24,14 +24,15 @@ prompt_yes_no() {
 }
 
 # @Brief: Prompts the user to select an option
-# @Param: $1 - Message to display
+# @Param: $1 - Variable name to store the selected option
 # @Param: $@ - Options to select from
 # @Return: The selected options
 # @Return: 1 if no option was selected
 select_options() {
-    local options=("$@")
-    local selected_options
+    local -n result_var=$1
+    local options=("${@:2}")
 
+    local selected_options
     selected_options=$(gum choose --no-limit --cursor.foreground="212" --cursor.bold "${options[@]}")
 
     if [[ -z $selected_options ]]; then
@@ -39,17 +40,20 @@ select_options() {
         return 1
     fi
 
-    echo "$selected_options"
+    # shellcheck disable=SC2034
+    result_var="$selected_options"
 }
 
 # @Brief: Prompts the user to select a single option
-# @Param: $@ - Options to select from
+# @Param: $1 - Variable name to store the selected option
+# @Param: $@:2 - Options to select from
 # @Return: The selected option
 # @Return: 1 if no option was selected
 choose_option() {
-    local options=("$@")
-    local selected_option
+    local -n result_var=$1
+    local options=("${@:2}")
 
+    local selected_option
     selected_option=$(gum choose --limit 1 --cursor.foreground="212" --cursor.bold "${options[@]}")
 
     if [[ -z $selected_option ]]; then
@@ -57,7 +61,8 @@ choose_option() {
         return 1
     fi
 
-    echo "$selected_option"
+    # shellcheck disable=SC2034
+    result_var="$selected_option"
 }
 
 # @Brief: Displays a message

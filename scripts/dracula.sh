@@ -135,7 +135,7 @@ install_dracula_theme() {
 
     if prompt_yes_no "Install Icon Theme?"; then
         local icon_theme_choice
-        icon_theme_choice=$(select_options "Dracula" "Tela Circle Icons")
+        choose_option icon_theme_choice "Dracula" "Tela Circle Icons"
 
         case $icon_theme_choice in
             "Dracula")

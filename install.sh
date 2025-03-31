@@ -3,7 +3,7 @@
 # File: install.sh
 # Brief: This script installs basic packages and configures the system
 # Author: Pedro De Santi
-# Date: 09/2024
+# Date: 04/2025
 # Version: 2.0
 
 readonly REPO_URL="https://raw.githubusercontent.com/PedroDeSanti/get-started/main/scripts/"
@@ -61,8 +61,7 @@ main() {
     show_title "Welcome to the Get Started setup script!"
     
     local choices
-    choices=$(
-        select_options \
+    select_options choices \
         "Install basic packages" \
         "Configure Git" \
         "Install VSCode" \
@@ -76,7 +75,6 @@ main() {
         "Install Chrome" \
         "Install Spotify" \
         "Install Flutter"
-    )
 
     # Process choices
     [[ $choices == *"Install basic packages"*       ]] && install_basic_packages
