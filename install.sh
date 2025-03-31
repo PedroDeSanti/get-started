@@ -36,7 +36,7 @@ source_scripts=(
 download_and_source_scripts() {
     for script in "${source_scripts[@]}"; do
         mkdir -p "$TEMP_DIR/$(dirname "$script")"
-        curl -fsSL "$REPO_URL/$script" -o "$TEMP_DIR/$script"
+        wget -q -O "$TEMP_DIR/$script" "$REPO_URL/$script"
         printf "Sourcing %s\n" "$script"
         # shellcheck disable=SC1090
         source "$TEMP_DIR/$script"
