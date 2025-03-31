@@ -76,8 +76,16 @@ run_with_loading() {
     local commands=("${@:2}")
     local failed=()
 
+    local num_commands=${#commands[@]}
+    local executed_commands=0
+    local progress_string=""
+
     for cmd in "${commands[@]}"; do
-        if ! _run_command_with_loading "$title" "$cmd"; then
+        if (( num_commands > 1 )); then
+            progress_string="[$((++executed_commands))/$num_commands] "
+        fi
+
+        if ! _run_command_with_loading "$progress_string$title" "$cmd"; then
             failed+=("$cmd")
         fi
     done

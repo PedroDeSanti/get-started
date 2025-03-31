@@ -15,8 +15,10 @@ install_nerd_fonts() {
         "curl -sSfLO https://github.com/ryanoasis/nerd-fonts/raw/HEAD/patched-fonts/FiraCode/SemiBold/FiraCodeNerdFontMono-SemiBold.ttf" 
 
     # Update font cache
-    fc-cache -fv 2>&1 | log_output || {
+    run_with_loading "Updating font cache..." \
+        "fc-cache -fv" || {
         log_warning "Failed to update font cache"
+        return
     }
 
     log_success "Nerd Fonts installed"
