@@ -26,7 +26,7 @@ install_flutter() {
 
     # Configure Flutter
     flutter config --android-sdk="$HOME"/Android/Sdk
-    flutter config --android-studio-dir=/snap/android-studio/current
+    # flutter config --android-studio-dir=/snap/android-studio/current
     yes | flutter doctor --android-licenses
     flutter doctor
 
