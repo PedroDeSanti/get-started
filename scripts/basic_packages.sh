@@ -36,20 +36,21 @@ basic_packages=(
 )
 
 _install_zoxide() {
-    log_info "Installing zoxide..."
-    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash >> "$LOG_FILE" 2>&1 || {
+    run_with_loading "Installing zoxide..." \
+        "curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash >> '$LOG_FILE' 2>&1" || {
         log_error "Failed to install zoxide"
+        return 1
     }
+
     log_success "Installed zoxide"
 }
 
 _install_eza() {
-    log_info "Installing eza..."
-    
-    sudo mkdir -p /etc/apt/keyrings
-    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list >> "$LOG_FILE" 2>&1
-    sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+    run_with_loading "Adding Eza GPG key and repository..." \
+        "sudo mkdir -p /etc/apt/keyrings" \
+        "wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg" \
+        "echo 'deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main' | sudo tee /etc/apt/sources.list.d/gierens.list >> '$LOG_FILE' 2>&1" \
+        "sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list"
 
     apt_update && apt_install eza || return   
 }
@@ -57,7 +58,7 @@ _install_eza() {
 install_basic_packages() {
     show_message "Installing basic packages..."
     
-    apt_install "${basic_packages[@]}" || return
+    apt_install "${basic_packages[@]}"
     _install_zoxide
     _install_eza
 

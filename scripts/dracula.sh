@@ -71,7 +71,9 @@ _install_gnome_terminal_dracula_theme() {
 _install_gedit_dracula_theme() {
     show_message "Installing Gedit Dracula Theme..."
     
-    wget -q https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml
+    run_with_loading "Downloading Gedit Dracula Theme" \
+        "wget -q https://raw.githubusercontent.com/dracula/gedit/master/dracula.xml"
+    
     mkdir -p "$HOME"/.local/share/gedit/styles/
     mv dracula.xml "$HOME"/.local/share/gedit/styles/
 
@@ -83,7 +85,8 @@ _install_gedit_dracula_theme() {
 _install_dracula_icon_theme() {
     show_message "Installing Icon Dracula Theme..."
 
-    curl -sSfLO https://github.com/dracula/gtk/files/5214870/Dracula.zip
+    run_with_loading "Downloading Dracula Icon Theme" \
+        "curl -sSfLO https://github.com/dracula/gtk/files/5214870/Dracula.zip"
 
     unzip -qq Dracula.zip
     mkdir -p ~/.icons/Dracula
