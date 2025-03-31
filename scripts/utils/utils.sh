@@ -85,7 +85,7 @@ run_with_loading() {
             progress_string="[$((++executed_commands))/$num_commands] "
         fi
 
-        if ! _run_command_with_loading "$progress_string$title" "$cmd"; then
+        if ! _run_command_with_loading "${progress_string}${title}" "$cmd"; then
             failed+=("$cmd")
         fi
     done
