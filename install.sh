@@ -94,9 +94,6 @@ main() {
     [[ $choices == *"Install Flutter"*              ]] && install_flutter
 
     # Summary
-    echo "$ERROR_COUNT"
-    echo "$LOG_FILE"
-    get_error_count
 
     if [[ $ERROR_COUNT -gt 0 ]]; then
         log_error "Installation completed with $ERROR_COUNT errors."

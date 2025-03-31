@@ -39,7 +39,7 @@ select_options() {
         return 1
     fi
 
-    echo "$selected_option"
+    echo "$selected_options"
 }
 
 # @Brief: Prompts the user to select a single option
