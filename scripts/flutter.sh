@@ -24,10 +24,14 @@ install_flutter() {
 
     show_message "Android Studio closed. Proceeding with Flutter setup..."
 
-    # Configure Flutter
-    flutter config --android-sdk="$HOME"/Android/Sdk
-    # flutter config --android-studio-dir=/snap/android-studio/current
-    yes | flutter doctor --android-licenses
+    flutter config --android-sdk="$HOME"/Android/Sdk 2>&1 | log_output || {
+        log_warning "Failed to configure Flutter with Android SDK"
+    }
+
+    yes | flutter doctor --android-licenses 2>&1 | log_output || {
+        log_warning "Failed to accept Android licenses"
+    }
+
     flutter doctor
 
     show_message "Flutter installation complete!"

@@ -20,6 +20,7 @@ source_scripts=(
     utils/installers.sh
     utils/initialize.sh
     basic_packages.sh
+    chrome.sh
     dracula.sh
     fish.sh
     flutter.sh
@@ -57,7 +58,7 @@ main() {
     elevate_privileges
     initialize
 
-    show_message "Welcome to the Get Started setup script!"
+    show_title "Welcome to the Get Started setup script!"
     
     local choices
     choices=$(
@@ -72,6 +73,7 @@ main() {
         "Install Fish shell" \
         "Install Nerd Fonts" \
         "Install J-Link" \
+        "Install Chrome" \
         "Install Spotify" \
         "Install Flutter"
     )
@@ -87,6 +89,7 @@ main() {
     [[ $choices == *"Install Fish shell"*           ]] && install_fish
     [[ $choices == *"Install Nerd Fonts"*           ]] && install_nerd_fonts
     [[ $choices == *"Install J-Link"*               ]] && install_jlink
+    [[ $choices == *"Install Chrome"*               ]] && install_chrome
     [[ $choices == *"Install Spotify"*              ]] && install_spotify
     [[ $choices == *"Install Flutter"*              ]] && install_flutter
 

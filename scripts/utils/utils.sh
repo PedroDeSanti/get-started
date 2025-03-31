@@ -27,8 +27,19 @@ prompt_yes_no() {
 # @Param: $1 - Message to display
 # @Param: $@ - Options to select from
 # @Return: The selected options
+# @Return: 1 if no option was selected
 select_options() {
-    gum choose --no-limit --cursor.foreground="212" --cursor.bold "$@"
+    local options=("$@")
+    local selected_options
+
+    selected_options=$(gum choose --no-limit --cursor.foreground="212" --cursor.bold "${options[@]}")
+
+    if [[ -z $selected_options ]]; then
+        log_error "No option selected"
+        return 1
+    fi
+
+    echo "$selected_option"
 }
 
 # @Brief: Prompts the user to select a single option
@@ -53,6 +64,12 @@ choose_option() {
 # @Param: $1 - Message to display
 show_message() {
     gum style --bold --foreground="212" " " "$@"
+}
+
+# @Brief: Displays a title
+# @Param: $1 - Title to display
+show_title() {
+    gum style --border normal --margin "1" --padding "1 2" --border-foreground 212 "$@"
 }
 
 # @Brief: Wraps a command in a loading animation
