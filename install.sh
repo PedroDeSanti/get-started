@@ -76,7 +76,6 @@ main() {
         "Install Spotify" \
         "Install Flutter"
 
-    # Process choices
     [[ $choices == *"Install basic packages"*       ]] && install_basic_packages
     [[ $choices == *"Configure Git"*                ]] && configure_git
     [[ $choices == *"Install VSCode"*               ]] && install_vscode
@@ -90,8 +89,6 @@ main() {
     [[ $choices == *"Install Chrome"*               ]] && install_chrome
     [[ $choices == *"Install Spotify"*              ]] && install_spotify
     [[ $choices == *"Install Flutter"*              ]] && install_flutter
-
-    # Summary
 
     if [[ $ERROR_COUNT -gt 0 ]]; then
         log_error "Installation completed with $ERROR_COUNT errors."
