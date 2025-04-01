@@ -59,9 +59,3 @@ log_output() {
 show_last_error(){
     log_error "$(grep -i "error\|E:" "$LOG_FILE" | tail -1)"
 }
-
-# @Brief: Gets the error count
-# @Return: The number of errors logged
-get_error_count() {
-    echo "$ERROR_COUNT"
-}

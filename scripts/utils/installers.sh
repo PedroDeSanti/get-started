@@ -36,12 +36,14 @@ apt_install() {
 # @Param: $@ - List of packages to install
 snap_install() {
     elevate_privileges
+    require_apt_packages snapd
     _install "sudo snap install" "$@"
 }
 
 # @Brief: Installs a list of packages using flatpak
 # @Param: $@ - List of packages to install
 flatpak_install() {
+    require_apt_packages flatpak
     _install "flatpak install -y flathub" "$@"
 }
 
@@ -49,6 +51,7 @@ flatpak_install() {
 # @Param: $1 - Remote to add
 # @Return: 0 if the remote was added successfully, 1 otherwise
 flatpak_remote_add() {
+    require_apt_packages flatpak
     if run_with_loading "Adding remote $1..." "flatpak remote-add --if-not-exists flathub $1"; then
         log_success "Flatpak remote added: $1"
     else
@@ -114,5 +117,21 @@ require_apt_packages() {
     if [[ ${#missing[@]} -gt 0 ]]; then
         log_info "Installing missing dependencies: ${missing[*]}"
         apt_update && apt_install "${missing[@]}" || return 1
+    fi
+}
+
+# @Brief Clone a Git repository recursively
+# @Param: $1 - Repository URL
+# @Return: 0 if the repository was cloned successfully, 1 otherwise
+git_clone() {
+    local repo=$1
+    require_apt_packages git
+
+    if run_with_loading "Cloning $repo" "git clone --recurse-submodules $repo"; then
+        log_success "Cloned $repo" 
+    else
+        show_last_error
+        log_error "Failed to clone $repo"
+        return 1
     fi
 }

@@ -116,18 +116,3 @@ run_with_loading() {
         return 1
     fi
 }
-
-# @Brief Clone a Git repository recursively
-# @Param: $1 - Repository URL
-# @Return: 0 if the repository was cloned successfully, 1 otherwise
-git_clone() {
-    local repo=$1
-
-    if run_with_loading "Cloning $repo" "git clone --recurse-submodules $repo"; then
-        log_success "Cloned $repo" 
-    else
-        show_last_error
-        log_error "Failed to clone $repo"
-        return 1
-    fi
-}
